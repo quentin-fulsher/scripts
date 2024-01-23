@@ -1,6 +1,8 @@
 # mkkafkatopic
 
 ## To Run
-1. `npm install`
-2. `node .\node_modules\zx\build\cli.js ./main.mjs --help`
-3. Read help text and plug in inputs that you want.
+0. `npm i -g zx`
+1. `clone repo and cd to this folder`
+2. `npm i`
+3. `zx ./main.mjs --help`
+4. Read help text and plug in inputs that you want.
