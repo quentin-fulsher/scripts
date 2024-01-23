@@ -1,7 +1,10 @@
-$.shell = `C:/Program Files/Git/usr/bin/bash.exe`;
 $.verbose = false;
 
 let main = async () => {
+  if(!argv.topic) {
+    echo(chalk.red('Topic name is required'))
+    return;
+  }
   let topicName = argv.topic.toLowerCase();
   let yamlFileName = `${topicName}.yaml`
 
@@ -65,7 +68,9 @@ spec:
 }
 
 if (argv.help) {
-  echo('--topic={topic.name}');
+  echo('Basic Usage:');
+  echo('zx main.mjs {topic.name} # name of the topic');
+  echo('Extra parameters:');
   echo('--dev-partition={number} # default = 1');
   echo('--stg-partition={number} # default = 1');
   echo('--prod-partition={number} # default = 8');
