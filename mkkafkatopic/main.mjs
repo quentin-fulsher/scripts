@@ -1,3 +1,4 @@
+#!/usr/bin/env zx
 $.verbose = false;
 
 let main = async () => {
