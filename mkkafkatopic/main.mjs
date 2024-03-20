@@ -18,6 +18,8 @@ let main = async () => {
   let prodReplicas = argv['prod-replicas'] || 3;
   let repoPath = path.normalize(argv.repos || `${os.homedir}/source/repos`);
 
+  let verbose = argv.verbose;
+
   let templateFn = (topic, partitions, replicas) => `apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaTopic
 metadata:
@@ -42,14 +44,30 @@ spec:
       echo(chalk.yellow(`${repo}/${yamlFileName} already exists`));
       return;
     }
+    
     echo(chalk.green(`Adding topic ${topicName} to ${repo}`))
-    await $`git checkout master`;
-    await $`git pull`;
+    
+    if (verbose) { echo(chalk.yellow('git checkout master')) };
+    // await $`git checkout master`;
+    
+    if (verbose) { echo(chalk.yellow('git pulling...')) };
+    // await $`git pull`;
+   
+    if (verbose) { echo(chalk.yellow('git checkout branch')) };
     await $`git checkout -B ${topicName}`;
+    
+    if (verbose) { echo(chalk.yellow('write file')) };
     await fs.outputFile(yamlFileName, template);
-    await $`git add -A`;
+    
+    if (verbose) { echo(chalk.yellow('git add')) };
+    await $`git add ${yamlFileName}`;
+    
+    if (verbose) { echo(chalk.yellow('git commit')) };
     await $`git commit -m "Adds ${topicName} template"`;
+   
+    if (verbose) { echo(chalk.yellow('git push')) };
     await $`git push -u origin ${topicName}`;
+    
     echo(chalk.green(`https://github.com/lytxinc/${repo}/pull/new/${topicName}`))
   }
 
@@ -79,6 +97,7 @@ if (argv.help) {
   echo('--stg-replicas={number} # default = 3');
   echo('--prod-replicas={number} # default = 3');
   echo('--repos={path/to/repos} # default = ~/source/repos');
+  echo('--verbose # logging before each shell command')
 } else {
   await main();
 }
